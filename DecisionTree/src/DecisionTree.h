@@ -78,8 +78,8 @@ private:
 	 9		 1
 
 	返回的map键值对将会是：
-	<0,	3>
-	<1,	3>
+	<0,	2>
+	<1,	4>
 	<2,	1>
 	@param dataIndexs: 需要用于计算的trainData或trainLabel的下标
 	*/
