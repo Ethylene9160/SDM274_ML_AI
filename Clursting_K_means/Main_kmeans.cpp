@@ -1,6 +1,6 @@
 #include"kmeans.h"
 
-int main() {
+int main2333() {
 	KMeans km(4, 2);
 	std::vector<std::vector<double>> trainPoints = {
 		{0.1,0.1},
