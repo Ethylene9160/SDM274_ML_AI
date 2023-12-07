@@ -28,7 +28,7 @@ typedef std::vector<int> cluster;
 
 
 class KMeans {
-private:
+protected:
 	int dimension;
 	int k;
 	coordinate clusterCenters;//中心点mu。 长度为k。 
@@ -56,7 +56,7 @@ private:
 public:
 	KMeans(int k, int dimension);
 	
-	void train(coordinate& points, int epochs);
+	virtual void train(coordinate& points, int epochs);
 
 	void printCenters();
 	

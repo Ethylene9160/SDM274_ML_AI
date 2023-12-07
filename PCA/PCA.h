@@ -27,6 +27,7 @@ public:
 private:
     int k;
     bool hasTrained;
+    Eigen::VectorXd mean;
     Eigen::MatrixXd transformedMatrix;
 };
 /*

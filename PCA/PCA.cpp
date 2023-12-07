@@ -5,7 +5,6 @@ PCA::PCA(int k) : k(k), hasTrained(false) {}
 PCA::PCA() : PCA(1) {}
 
 void PCA::train(const std::vector<std::vector<double>>& data) {
-    // [与之前相同的步骤，用于计算转换矩阵]
     assert(data.size() > 0);
 
     // 将std::vector转换为Eigen::MatrixXd
@@ -19,13 +18,14 @@ void PCA::train(const std::vector<std::vector<double>>& data) {
     }
 
     // 计算均值并中心化数据
-    Eigen::VectorXd mean = dataMat.colwise().mean();
+    this->mean = dataMat.colwise().mean();
     Eigen::MatrixXd centered = dataMat.rowwise() - mean.transpose();
 
     // 计算协方差矩阵
     Eigen::MatrixXd cov = (centered.adjoint() * centered) / double(dataMat.rows() - 1);
 
-    // 计算特征值和特征向量
+    // 计算特征值和特征向量。
+    //C++的Eigen库中，获取到的eigen默认为升序排列，所以不必再对其进行排序。
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eig(cov);
     this->transformedMatrix = eig.eigenvectors().rightCols(k);
 
@@ -53,8 +53,8 @@ std::vector<std::vector<double>> PCA::transform(const std::vector<std::vector<do
         }
     }
     // 计算均值并中心化数据
-    Eigen::VectorXd mean = dataMat.colwise().mean();
-    Eigen::MatrixXd centered = dataMat.rowwise() - mean.transpose();
+    // this->mean = dataMat.colwise().mean();
+    Eigen::MatrixXd centered = dataMat.rowwise() - this->mean.transpose();
     // 使用保存的转换矩阵进行降维
     Eigen::MatrixXd transformed = centered * transformedMatrix;
 
