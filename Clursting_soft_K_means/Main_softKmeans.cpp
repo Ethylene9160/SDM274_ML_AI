@@ -1,7 +1,7 @@
 #include <iostream>
 #include "softKmeans.h" // Make sure to include the correct header file for SoftKMeans
 
-int main() {
+int main332211() {
     int k = 3; // Number of clusters
     int dimensions = 2; // Number of dimensions for each point
     double beta = 1.0; // Softness parameter
