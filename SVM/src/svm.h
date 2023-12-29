@@ -68,13 +68,7 @@ static double default_kernal(my_vector&input, int i) {
 	return input[i];//pass. TODO!
 }
 
-static int randomInt(int i, int n) {
-	int j = i;
-	while (j == i) {
-		j = rand() % n;
-	}
-	return j;
-}
+
 
 template<typename T>
 static T max(T a, T b) {
@@ -105,6 +99,16 @@ public:
 
 class svm {
 protected:
+
+	int randomInt(int i, int n) {
+		int j = i;
+		while (j == i) {
+			j = rand() % n;
+		}
+		
+		return j;
+	}
+
 	//calculateLinearKernal k;
 	MyMatrix W;	//power matrix;
 	MyMatrix B;	//bias matrix;
@@ -174,6 +178,8 @@ public:
 		//this->kernal = computeKernelMatrix;
 		this->C = 0.6;
 		printf("init successfully!\n");
+
+		srand(time(0));
 	}
 
 	void fit(std::vector<std::vector<double>>&X, std::vector<int>&y) {
@@ -231,7 +237,7 @@ public:
 
 
 		double b = 0.0;
-		this->epochs = 1; // 最大迭代次数
+		this->epochs = 5; // 最大迭代次数
 		MyMatrix K = calculateLinearKernal(X,X);
 		printf("init over\n");
 		for (uint32_t iter = 0; iter < this->epochs; ++iter) {
@@ -247,18 +253,29 @@ public:
 				//checkpoint: dimension of which.
 				printf("finished K%d\n", i);
 				std::cout << Ki << std::endl;
-				double ui = (a_prev(i)*y).dot(Ki) + b;
+				double ui = 0.0;
+				double vari = (a(i) * y);
+				for (uint32_t it = 0; it < Ki.rows(); ++it) {
+					ui += vari * Ki(it);
+				}
+
+				ui += b;
 				double Ei = ui - y(i);
 				printf("judge y ei ai c\n");
 				if ((y[i] * Ei >= 1.0 && a_prev[i] > 0) ||
-					(y[i] * Ei<=1 && a_prev[i] < this->C)||
-					(y[i] = Ei == 1 && a_prev[i] == 0) ||
-					(y[i] * Ei == 1 && a_prev[i] == this->C) ){
+					(y[i] * Ei <= 1.0 && a_prev[i] < this->C)||
+					(y[i] * Ei == 1.0 && a_prev[i] == 0) ||
+					(y[i] * Ei == 1.0 && a_prev[i] == this->C) ){
 					printf("inner judgement\n");
 					int j = randomInt(i, n);
 					// error for i
 					Eigen::VectorXd Kj = calculateLinearKernal(X, Eigen::VectorXd(X.row(j)));
-					double uj = (a(j) * y).dot(Kj) + b;
+					double uj = 0.0;
+					double var1 = (a.dot(y));
+					for (uint32_t it = 0; it < Kj.rows(); ++it) {
+						uj +=  var1 * (Kj)[it];
+					}
+					uj += b;
 					double Ej = uj - y[j];
 					//find bounds
 					double L = 0, H = 0;
