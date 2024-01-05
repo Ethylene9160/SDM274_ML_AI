@@ -254,7 +254,7 @@ public:
 				printf("finished K%d\n", i);
 				std::cout << Ki << std::endl;
 				double ui = 0.0;
-				double vari = (a(i) * y);
+				double vari = (a(i)* y(i));
 				for (uint32_t it = 0; it < Ki.rows(); ++it) {
 					ui += vari * Ki(it);
 				}
@@ -358,6 +358,10 @@ public:
 			}
 		}
 		printf("finish calculate w\n");
+		
+	}
+	virtual ~svm() {
+		printf("svm desturcted\n");
 	}
 	/**
 	* Above the line, then return 1; else return 0.
